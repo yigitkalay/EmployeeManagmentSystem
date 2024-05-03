@@ -4,7 +4,10 @@ import com.yk.employeeManagmentSystem.entities.Employee;
 import com.yk.employeeManagmentSystem.repositories.EmployeeRepository;
 import com.yk.employeeManagmentSystem.services.abstracts.EmployeeService;
 import com.yk.employeeManagmentSystem.services.dtos.requests.employee.AddEmployeeRequest;
+import com.yk.employeeManagmentSystem.services.dtos.requests.employee.UpdateEmployeeRequest;
 import com.yk.employeeManagmentSystem.services.dtos.responses.employee.AddEmployeeResponse;
+import com.yk.employeeManagmentSystem.services.dtos.responses.employee.GetEmployeeResponse;
+import com.yk.employeeManagmentSystem.services.dtos.responses.employee.UpdateEmployeeResponse;
 import com.yk.employeeManagmentSystem.services.mappers.EmployeeMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -32,24 +35,24 @@ public class EmployeeServiceImpl implements EmployeeService {
         response1.setName(response.getName());
         response1.setSurname(response.getSurname());*/
 
-        Employee employee= EmployeeMapper.INSTANCE.employeeFromRequest(request);
-        AddEmployeeResponse response = EmployeeMapper.INSTANCE.employeeFromResponse(employeeRepository.save(employee));
-        return response;
+        Employee employee= EmployeeMapper.INSTANCE.addRequestToEmployee(request);
+        return EmployeeMapper.INSTANCE.employeeToAddResponse(employeeRepository.save(employee));
     }
 
-    public void update(Employee employee) {
-        employeeRepository.save(employee);
+    public UpdateEmployeeResponse update(UpdateEmployeeRequest request) {
+        Employee employee = EmployeeMapper.INSTANCE.updateRequestToEmployee(request);
+        return EmployeeMapper.INSTANCE.employeeToUpdateResponse(employeeRepository.save(employee));
     }
 
     public void delete(int id) {
         employeeRepository.deleteById(id);
     }
 
-    public List<Employee> getAll() {
-        return employeeRepository.findAll();
+    public List<GetEmployeeResponse> getAll() {
+        return EmployeeMapper.INSTANCE.employeeToGetAllResponse(employeeRepository.findAll());
     }
 
-    public Employee getById(int id) {
-        return employeeRepository.findById(id).orElse(null);
+    public GetEmployeeResponse getById(int id) {
+        return EmployeeMapper.INSTANCE.employeeToGetResponse(employeeRepository.findById(id).orElse(null));
     }
 }

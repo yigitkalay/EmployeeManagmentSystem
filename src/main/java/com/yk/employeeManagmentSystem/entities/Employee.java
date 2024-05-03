@@ -26,7 +26,7 @@ public class Employee {
     @Column(name = "surname")
     private String surname;
     @Column(name = "birth_date")
-    @JsonFormat(pattern="yyyy-MM-dd")
+    //@JsonFormat(pattern="yyyy-MM-dd")
     private Date birthDate;
     @Column(name = "birth_city")
     private String birthCity;
