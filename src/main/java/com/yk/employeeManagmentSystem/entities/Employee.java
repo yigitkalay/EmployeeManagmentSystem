@@ -36,7 +36,6 @@ public class Employee {
     private String phoneNumber;
 
     @ManyToOne()
-    @JsonIgnore
     @JoinColumn(name = "department_id")
     private Department department;
 }

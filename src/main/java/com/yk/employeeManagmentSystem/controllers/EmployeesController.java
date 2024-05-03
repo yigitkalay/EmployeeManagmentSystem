@@ -1,10 +1,15 @@
 package com.yk.employeeManagmentSystem.controllers;
 
 import com.yk.employeeManagmentSystem.entities.Employee;
-import com.yk.employeeManagmentSystem.repositories.EmployeeRepository;
+import com.yk.employeeManagmentSystem.services.abstracts.EmployeeService;
+import com.yk.employeeManagmentSystem.services.dtos.requests.employee.AddEmployeeRequest;
+import com.yk.employeeManagmentSystem.services.dtos.responses.employee.AddEmployeeResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -12,7 +17,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class EmployeesController {
 
-    private final EmployeeRepository employeeRepository;
+    private final EmployeeService employeeService;
 
     /*@GetMapping()
     public String get(@RequestParam String name){
@@ -20,7 +25,21 @@ public class EmployeesController {
     }*/
 
     @GetMapping()
-    public List<Employee> get(){
-        return employeeRepository.findAll();
+    public List<Employee> getEmployee(){
+        return employeeService.getAll();
+    }
+
+    @PostMapping()
+    //@ResponseStatus(HttpStatus.CREATED)
+    public ResponseEntity<AddEmployeeResponse> addEmployee(@RequestBody AddEmployeeRequest request){
+
+        AddEmployeeResponse response= employeeService.add(request);
+        URI location= ServletUriComponentsBuilder.
+                fromCurrentRequest().
+                path("/{id}").
+                buildAndExpand(response.getId()).
+                toUri();
+        //URI location = URI.create("/api/employees/"+response.getId());
+        return ResponseEntity.created(location).body(response);
     }
 }
