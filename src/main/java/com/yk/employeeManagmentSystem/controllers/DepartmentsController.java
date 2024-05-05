@@ -6,6 +6,7 @@ import com.yk.employeeManagmentSystem.services.dtos.requests.department.UpdateDe
 import com.yk.employeeManagmentSystem.services.dtos.responses.department.AddDepartmentResponse;
 import com.yk.employeeManagmentSystem.services.dtos.responses.department.GetDepartmentResponse;
 import com.yk.employeeManagmentSystem.services.dtos.responses.department.UpdateDepartmentResponse;
+import jakarta.validation.Valid;
 import jakarta.websocket.server.PathParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -32,7 +33,7 @@ public class DepartmentsController {
     }
 
     @PostMapping()
-    public ResponseEntity<AddDepartmentResponse> add(@RequestBody AddDepartmentRequest request) {
+    public ResponseEntity<AddDepartmentResponse> add(@RequestBody @Valid AddDepartmentRequest request) {
         AddDepartmentResponse response = departmentService.add(request);
 
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(response.getId()).toUri();
@@ -41,7 +42,7 @@ public class DepartmentsController {
     }
 
     @PutMapping()
-    public UpdateDepartmentResponse update(@RequestBody UpdateDepartmentRequest request) {
+    public UpdateDepartmentResponse update(@RequestBody @Valid UpdateDepartmentRequest request) {
         return departmentService.update(request);
     }
 

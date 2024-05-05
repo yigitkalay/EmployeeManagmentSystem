@@ -9,11 +9,11 @@ import com.yk.employeeManagmentSystem.services.dtos.responses.department.AddDepa
 import com.yk.employeeManagmentSystem.services.dtos.responses.department.GetDepartmentResponse;
 import com.yk.employeeManagmentSystem.services.dtos.responses.department.UpdateDepartmentResponse;
 import com.yk.employeeManagmentSystem.services.mappers.DepartmentMapper;
-import com.yk.employeeManagmentSystem.services.mappers.EmployeeMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -22,11 +22,14 @@ public class DepartmentServiceImpl implements DepartmentService {
     private final DepartmentRepository departmentRepository;
 
     public AddDepartmentResponse add(AddDepartmentRequest request) {
+        departmentWithSameNameShouldNotExist(request.getDepartmentName());
+
         Department department = DepartmentMapper.INSTANCE.addRequestToDepartment(request);
         return DepartmentMapper.INSTANCE.departmentToAddResponse(departmentRepository.save(department));
     }
 
     public UpdateDepartmentResponse update(UpdateDepartmentRequest request) {
+        departmentWithSameNameShouldNotExist(request.getDepartmentName());
         Department department = DepartmentMapper.INSTANCE.updateRequestToDepartment(request);
         return DepartmentMapper.INSTANCE.departmentToUpdateResponse(departmentRepository.save(department));
     }
@@ -41,5 +44,12 @@ public class DepartmentServiceImpl implements DepartmentService {
 
     public GetDepartmentResponse getById(int id) {
         return DepartmentMapper.INSTANCE.departmentToGetResponse(departmentRepository.findById(id).orElse(null));
+    }
+
+    private void departmentWithSameNameShouldNotExist(String name) {
+        Optional<Department> departmentWithSameName = departmentRepository.findByDepartmentNameIgnoreCase(name);
+        if (departmentWithSameName.isPresent()) {
+            throw new RuntimeException("Can't generate 2.Department with same name");
+        }
     }
 }
