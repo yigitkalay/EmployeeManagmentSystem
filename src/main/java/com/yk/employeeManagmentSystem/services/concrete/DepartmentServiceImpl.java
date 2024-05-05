@@ -1,5 +1,6 @@
 package com.yk.employeeManagmentSystem.services.concrete;
 
+import com.yk.employeeManagmentSystem.core.utils.exceptions.types.BusinessException;
 import com.yk.employeeManagmentSystem.entities.Department;
 import com.yk.employeeManagmentSystem.repositories.DepartmentRepository;
 import com.yk.employeeManagmentSystem.services.abstracts.DepartmentService;
@@ -49,7 +50,7 @@ public class DepartmentServiceImpl implements DepartmentService {
     private void departmentWithSameNameShouldNotExist(String name) {
         Optional<Department> departmentWithSameName = departmentRepository.findByDepartmentNameIgnoreCase(name);
         if (departmentWithSameName.isPresent()) {
-            throw new RuntimeException("Can't generate 2.Department with same name");
+            throw new BusinessException("Can't generate 2.Department with same name");
         }
     }
 }
