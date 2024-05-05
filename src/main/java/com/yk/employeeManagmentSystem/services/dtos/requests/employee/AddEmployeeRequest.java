@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Date;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -12,5 +14,9 @@ import lombok.Setter;
 public class AddEmployeeRequest {
     private String name;
     private String surname;
+    private Date birthDate;
+    private String birthCity;
+    private String birthCountry;
+    private String phoneNumber;
     private int departmentId;
 }
